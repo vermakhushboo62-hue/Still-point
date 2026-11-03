@@ -332,6 +332,13 @@ const F = {
     m:{name:"Unclench", why:"Irritation hides in tight fists, jaw and forehead. Tense on purpose, then let go.",
       steps:[["Squeeze both fists as tight as you can","5 sec"],["Open your hands wide and let them go loose","3 times"],["Scrunch your whole face, then relax it and drop your jaw","3 times"],["Take a quick walk, even just to another room","1 min"]]},
     r:{prompt:"Will this matter in a week? If yes, write one calm sentence you could say about it. If no, write \"let it pass\".", line:"Small things feel bigger when you're tired, hungry or rushed. Check those first."}},
+  impatient:{label:"Impatient", title:"You want it to happen now. <em>Slow the clock inside you.</em>",
+    note:"Impatience makes time feel slower and the body tense. Slowing your breath and movement on purpose brings your pace back to normal.",
+    b:{name:"Slow-down breath", how:"Breathe in for 5, pause for 2, then breathe out slowly for 7. Let each count be a little slower than feels natural.",
+      phases:[["Breathe in",5,1],["Pause",2,1],["Breathe out slowly",7,.45]], cycles:5},
+    m:{name:"Slow motion", why:"Moving slowly on purpose tells a hurried body there's no race.",
+      steps:[["Walk 10 steps in slow motion, feeling each foot land",""],["Raise your arms over 10 seconds, then lower them over 10","3 times"],["Touch each fingertip to your thumb, one at a time, slowly","2 rounds"],["Stand still and feel your weight in your feet","3 breaths"]]},
+    r:{prompt:"What am I waiting for, and which part of it is actually in my control right now?", line:"Rushing the wait doesn't make it shorter. Use it for something small, or let it be a pause."}},
   betrayed:{label:"Betrayed", title:"Trust got hurt. <em>Hold yourself steady first.</em>",
     note:"Betrayal hits the body like a fall. Steady, even breathing and warmth help you land.",
     b:{name:"Steady square", how:"Equal counts in, hold, out, hold. Picture tracing the four sides of a square.",
@@ -417,7 +424,7 @@ const C = {
   sun:["#FFC83A","#3A3860","rgba(255,200,58,.25)"], leaf:["#2FBF71","#FFFFFF","rgba(47,191,113,.2)"],
   violet:["#7A5AE0","#FFFFFF","rgba(122,90,224,.2)"], sky:["#8CCBF5","#3A3860","rgba(140,203,245,.3)"]
 };
-const tone = {overwhelmed:"orange",anxious:"sky",fear:"violet",angry:"orange",annoyed:"sun",betrayed:"pink",disappointed:"sky",
+const tone = {overwhelmed:"orange",anxious:"sky",fear:"violet",angry:"orange",annoyed:"sun",impatient:"orange",betrayed:"pink",disappointed:"sky",
   jealous:"leaf",small:"sun",unfocused:"violet",notenough:"pink",tired:"sky",bored:"sun",sad:"violet",lonely:"pink",present:"leaf"};
 
 /* Untangle: stuck points per hard feeling */
@@ -477,6 +484,17 @@ const P = {
      newB:"Most people are distracted, not against me.",
      efforts:["Think of one other reason they might act this way","Ask a question instead of assuming","Give one person the benefit of the doubt"],
      uses:["A message left unanswered","Someone cuts in line","A housemate leaves dishes","A colleague replies late","Family members interrupting"]}],
+  impatient:[
+    {stuck:"This is taking too long.", belief:"Waiting means I'm losing time.",
+     roots:["Being rushed a lot growing up","A packed life where every minute felt counted"],
+     newB:"Some things take the time they take. A pause isn't wasted time.",
+     efforts:["Use one wait today to take 3 slow breaths","Keep a book or podcast ready for waiting time","Leave 10 minutes early so you're not racing the clock"],
+     uses:["Traffic jams","Queues at the bank or shop","Slow-loading apps","Waiting for a reply","Doctor's waiting rooms"]},
+    {stuck:"Why isn't anything changing yet?", belief:"If results aren't quick, my effort isn't working.",
+     roots:["Expecting quick results at school or work","Seeing only other people's highlights"],
+     newB:"Real change is slow and steady. My effort counts even before I can see it.",
+     efforts:["Note one small sign of progress each week","Pick a review date instead of checking every day","Write down what you did today, not what's missing"],
+     uses:["Fitness goals","Learning a new skill","Saving money","Healing after illness or a breakup","Growing your career"]}],
   betrayed:[
     {stuck:"I can never trust anyone again.", belief:"If I let people close, I'll get hurt.",
      roots:["An earlier betrayal by someone close","Promises broken when you were young"],
