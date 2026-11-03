@@ -381,6 +381,13 @@ const F = {
     m:{name:"Gentle wake-up", why:"A little blood flow and fresh air does more than another cup of tea.",
       steps:[["Stand up and reach both arms high, rising onto your toes","10 sec"],["March on the spot, swinging your arms","30 sec"],["Roll your neck slowly, three times each way",""],["Splash cold water on your face or step outside for fresh air",""]]},
     r:{prompt:"Is this tiredness asking for rest, or for a change of what I'm doing? Write the one thing that would help most.", line:"Rest isn't something you have to earn. A short nap or an early night is a fair choice."}},
+  bored:{label:"Bored", title:"Everything feels flat. <em>Wake up your curiosity.</em>",
+    note:"Boredom is a sign your mind wants something new. A little fresh air, movement and curiosity can bring the colour back.",
+    b:{name:"Curious breath", how:"Breathe in through the nose for 4 and notice the cool air. Breathe out for 4 and notice the warm air. Stay curious about each breath.",
+      phases:[["Breathe in, notice cool air",4,1],["Breathe out, notice warm air",4,.45]], cycles:6},
+    m:{name:"Change the scene", why:"A small jolt of movement and something new to look at wakes up a sleepy mind.",
+      steps:[["Stand up and do 10 jumping jacks or march on the spot",""],["Go to a window or another room and look at something new","30 sec"],["Pick up any object and study it closely, like you've never seen it","30 sec"],["Stretch side to side, reaching over your head","5 each side"]]},
+    r:{prompt:"What would I enjoy doing for 10 minutes if no one was watching or judging? Or what's one thing I've been curious about lately?", line:"Boredom often comes just before a good idea. It's a nudge toward something new."}},
   sad:{label:"Sad or heavy", title:"Things feel heavy. <em>Go gently.</em>",
     note:"Sadness doesn't need fixing right away. It needs a little care and some movement to keep it flowing.",
     b:{name:"Soft sighing", how:"Breathe in for 4, then sigh out for 6 with a little sound. Let the sound be as heavy as you feel.",
@@ -411,7 +418,7 @@ const C = {
   violet:["#7A5AE0","#FFFFFF","rgba(122,90,224,.2)"], sky:["#8CCBF5","#3A3860","rgba(140,203,245,.3)"]
 };
 const tone = {overwhelmed:"orange",anxious:"sky",fear:"violet",angry:"orange",annoyed:"sun",betrayed:"pink",disappointed:"sky",
-  jealous:"leaf",small:"sun",unfocused:"violet",notenough:"pink",tired:"sky",sad:"violet",lonely:"pink",present:"leaf"};
+  jealous:"leaf",small:"sun",unfocused:"violet",notenough:"pink",tired:"sky",bored:"sun",sad:"violet",lonely:"pink",present:"leaf"};
 
 /* Untangle: stuck points per hard feeling */
 const P = {
@@ -547,6 +554,17 @@ const P = {
      newB:"Small changes add up. I can look after my energy bit by bit.",
      efforts:["Drink a glass of water when you wake up","Take a 5-minute walk in daylight","See a doctor if tiredness lasts for weeks"],
      uses:["Mornings","The afternoon slump","Busy weeks","Exam season","Caring for others"]}],
+  bored:[
+    {stuck:"Nothing is interesting anymore.", belief:"My life is dull and won't change.",
+     roots:["Long stretches of the same routine","Losing a hobby, friend or goal that used to excite you"],
+     newB:"Interest grows from small new things. I can add a little newness to my day.",
+     efforts:["Try one new thing today, even a new route or recipe","Spend 10 minutes on something you used to love","Ask someone what they're excited about lately"],
+     uses:["Long weekends at home","Repetitive work tasks","Evenings spent scrolling","Holidays with no plans","Waiting rooms and commutes"]},
+    {stuck:"I should always be doing something useful.", belief:"Doing nothing means I'm wasting myself.",
+     roots:["Mostly being praised for being busy","Feeling guilty whenever there was free time"],
+     newB:"Quiet time is allowed. Boredom gives my mind room to wander and create.",
+     efforts:["Sit for 5 minutes without your phone","Let your mind wander on a short walk","Doodle or daydream without a goal"],
+     uses:["Long journeys","Slow days at work","Rainy afternoons","Waiting for someone","Sunday evenings"]}],
   sad:[
     {stuck:"Nothing will get better.", belief:"Things are hopeless.",
      roots:["A loss or grief","Long stretches without support"],

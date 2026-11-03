@@ -1,6 +1,6 @@
 # Still Point
 
-A small calming tool. Pick what you're feeling (overwhelmed, anxious, afraid, angry, annoyed, betrayed, disappointed, jealous, small, unfocused, not enough, tired, sad, lonely) or enjoying the present and get a guided breathing pattern, a short movement and a simple mind reset.
+A small calming tool. Pick what you're feeling (overwhelmed, anxious, afraid, angry, annoyed, betrayed, disappointed, jealous, small, unfocused, not enough, tired, bored, sad, lonely) or enjoying the present and get a guided breathing pattern, a short movement and a simple mind reset.
 
 Hard feelings also have an Untangle step: stuck point, core belief, where it may come from, a kinder new belief, tiny efforts and places to use it.
 
