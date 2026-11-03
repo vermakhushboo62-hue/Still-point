@@ -116,6 +116,35 @@ footer{color:var(--muted);font-size:.88rem;max-width:72ch;display:flex;gap:12px;
 footer strong{color:var(--ink);user-select:all}
 footer .cloud{width:44px;flex:none}
 
+/* untangle */
+.flow{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:14px}
+.fstep{display:grid;grid-template-columns:40px minmax(0,1fr);gap:14px;align-items:start}
+.fnum{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--mood);color:var(--mood-ink);font-family:var(--display);font-weight:700}
+.fbody{background:var(--paper);border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.fbody h4{font-family:var(--display);font-weight:600;font-size:1.2rem;margin:0;line-height:1.2}
+.hint{margin:0;color:var(--muted);font-size:.93rem}
+.fbody textarea{min-height:72px;background:var(--card)}
+.fbody input[type=text]{width:100%;font:inherit;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink)}
+.picks{display:flex;flex-direction:column;gap:8px}
+.pick{font:inherit;text-align:left;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:16px;padding:12px 14px;cursor:pointer;font-weight:700;display:flex;gap:10px;align-items:center}
+.pick::before{content:"";flex:none;width:16px;height:16px;border-radius:50%;border:2px solid var(--line)}
+.pick[aria-pressed="true"]{border-color:var(--mood);background:var(--mood-soft)}
+.pick[aria-pressed="true"]::before{background:var(--mood);border-color:var(--mood)}
+.pick.own{font-weight:600;color:var(--muted);border-style:dashed}
+.qs{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.roots{display:flex;flex-wrap:wrap;gap:6px}
+.root{font:inherit;font-size:.85rem;font-weight:700;border:0;border-radius:999px;padding:6px 12px;background:var(--mood-soft);color:var(--ink);cursor:pointer}
+.root::before{content:"+ "}
+.newb{font-family:var(--display);font-weight:600;font-size:1.15rem}
+.checks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.checks label{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-weight:600}
+.checks input{width:20px;height:20px;accent-color:var(--mood);flex:none;margin-top:2px}
+.checks input:checked + span{text-decoration:line-through;color:var(--muted)}
+.uses{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px}
+.uses li{background:var(--card);border:2px solid var(--line);border-radius:14px;padding:10px 12px;font-weight:600;font-size:.93rem}
+.careful{margin:6px 0 0;font-size:.88rem;color:var(--muted)}
+.deeper{margin-top:8px}
+
 @media (prefers-reduced-motion: reduce){.orb,.hstar,.ostar{animation:none!important;transition:none!important}.chip{transition:none}}
 </style>
 </head>
@@ -133,7 +162,7 @@ footer .cloud{width:44px;flex:none}
     <svg class="sun" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="#FFC83A"/><circle cx="32" cy="32" r="21" fill="#FF7A1A"/></svg>
     <div>
       <h1>Still <span>Point</span></h1>
-      <p>Pick what you're feeling. Breathe, move, then reset. About five minutes.</p>
+      <p>Pick what you're feeling. Breathe, move, reset, and untangle what's underneath when you're ready.</p>
     </div>
     <svg class="hstar" aria-hidden="true"><use href="#star"/></svg>
   </header>
@@ -160,6 +189,7 @@ footer .cloud{width:44px;flex:none}
         <button class="tab" role="tab" id="tab-breathe" aria-selected="true" data-step="breathe"><span>1</span>Breathe</button>
         <button class="tab" role="tab" id="tab-move" aria-selected="false" data-step="move"><span>2</span>Move</button>
         <button class="tab" role="tab" id="tab-reset" aria-selected="false" data-step="reset"><span>3</span>Reset</button>
+        <button class="tab" role="tab" id="tab-untangle" aria-selected="false" data-step="untangle"><span>4</span>Untangle</button>
       </div>
 
       <section id="step-breathe" class="breathe">
@@ -206,7 +236,55 @@ footer .cloud{width:44px;flex:none}
             <button class="chip" data-feel="worse">Still heavy</button>
           </div>
           <p class="reply" id="reply"></p>
+          <div class="deeper" id="deeper"><button class="btn" data-go="untangle">Go deeper: untangle it</button></div>
         </div>
+      </section>
+      <section id="step-untangle" class="panel" hidden>
+        <div class="label">Untangle</div>
+        <h3>Find what's keeping you stuck</h3>
+        <p>Go slowly. There are no wrong answers, and everything you write stays on this device.</p>
+        <ol class="flow">
+          <li class="fstep"><div class="fnum">1</div><div class="fbody">
+            <h4>What's the stuck point?</h4>
+            <p class="hint">The thought that keeps looping. Pick the closest one, or write your own.</p>
+            <div class="picks" id="uPicks"></div>
+            <textarea id="uStuck" hidden placeholder="Write the thought that keeps coming back."></textarea>
+          </div></li>
+          <li class="fstep later"><div class="fnum">2</div><div class="fbody">
+            <h4>The core belief underneath</h4>
+            <p class="hint">A deeper rule about yourself, other people or the world. Change the words until they feel true for you.</p>
+            <textarea id="uBelief" placeholder="If this thought were true, what would it say about me?"></textarea>
+          </div></li>
+          <li class="fstep later"><div class="fnum">3</div><div class="fbody">
+            <h4>Where might it come from?</h4>
+            <ul class="qs hint">
+              <li>When do you first remember feeling this way?</li>
+              <li>Whose voice does this belief sound like?</li>
+              <li>What did it protect you from back then?</li>
+            </ul>
+            <div class="roots" id="uRoots"></div>
+            <textarea id="uOrigin" placeholder="Write whatever comes up."></textarea>
+            <p class="careful">These are only possibilities. You know your story best. If this brings up something painful, it's okay to stop here, and a counsellor can help with deeper roots.</p>
+          </div></li>
+          <li class="fstep later"><div class="fnum">4</div><div class="fbody">
+            <h4>A kinder, truer belief</h4>
+            <p class="hint">Something more balanced that you can still believe. Edit it until it sounds like you.</p>
+            <textarea id="uNew" class="newb"></textarea>
+            <label for="uEvidence" class="hint">One thing from your life that shows it's true</label>
+            <input type="text" id="uEvidence" placeholder="For example: last month I asked for help and it went fine.">
+          </div></li>
+          <li class="fstep later"><div class="fnum">5</div><div class="fbody">
+            <h4>Tiny efforts to grow it</h4>
+            <p class="hint">Small actions that prove the new belief a little at a time. Tick them off as you try them.</p>
+            <ul class="checks" id="uEfforts"></ul>
+          </div></li>
+          <li class="fstep later"><div class="fnum">6</div><div class="fbody">
+            <h4>5 places to use it</h4>
+            <p class="hint">When one of these comes up, remind yourself of your new belief.</p>
+            <ul class="uses" id="uUses"></ul>
+          </div></li>
+        </ol>
+        <div class="controls" style="margin-top:18px"><button class="btn ghost" id="uClear">Start over</button></div>
       </section>
     </main>
   </div>
@@ -335,6 +413,164 @@ const C = {
 const tone = {overwhelmed:"orange",anxious:"sky",fear:"violet",angry:"orange",annoyed:"sun",betrayed:"pink",disappointed:"sky",
   jealous:"leaf",small:"sun",unfocused:"violet",notenough:"pink",tired:"sky",sad:"violet",lonely:"pink",present:"leaf"};
 
+/* Untangle: stuck points per hard feeling */
+const P = {
+  overwhelmed:[
+    {stuck:"I have to get all of this done, and done right.", belief:"If I drop anything, everything falls apart.",
+     roots:["Being the responsible one others leaned on","Mostly being praised for achieving or being busy"],
+     newB:"I can do one thing at a time, and good enough is enough.",
+     efforts:["Pick 3 tasks for today, not 10","Ask one person for help with one small thing","Stop at a set time, even if the list isn't done"],
+     uses:["A packed work day","Family events where everyone expects you to organise","Your inbox after a holiday","Exam or deadline weeks","Household chores piling up"]},
+    {stuck:"I can't say no.", belief:"My worth depends on keeping everyone happy.",
+     roots:["Being expected to keep the peace at home","Feeling approved of mainly when you were useful"],
+     newB:"I can care about people and still have limits.",
+     efforts:["Say \"let me check and get back to you\" instead of an instant yes","Decline one small request this week","Check your energy before agreeing to anything"],
+     uses:["A colleague asks you to take on extra work","Relatives ask for favours","Friends plan a night out when you're drained","Calls or messages late at night","Volunteering when you're already stretched"]}],
+  anxious:[
+    {stuck:"Something bad is going to happen.", belief:"If I stop worrying, I'll be caught off guard.",
+     roots:["Living through something sudden or frightening","Growing up around a parent or carer who worried a lot"],
+     newB:"I can handle things as they come. Worrying doesn't protect me.",
+     efforts:["Set a 10-minute worry time and park worries until then","Ask yourself what is most likely, not what is worst","Do one thing today without double-checking it"],
+     uses:["Waiting for test or medical results","A family member is late getting home","Before a presentation","When news alerts pile up","Before a journey"]},
+    {stuck:"People are judging me.", belief:"If I'm not perfect, I'll be rejected.",
+     roots:["Being criticised or compared often","An embarrassing moment that stayed with you"],
+     newB:"Most people are busy with their own lives. Mistakes make me human, not unlikeable.",
+     efforts:["Send one message without rereading it three times","Share one small opinion in a group","Recall a time someone was kind after you made a mistake"],
+     uses:["Speaking up in meetings","Posting something online","Meeting new people","Asking a question in public","Messaging someone first"]}],
+  fear:[
+    {stuck:"I won't be able to cope if it happens.", belief:"I'm not strong enough.",
+     roots:["A time you felt helpless and alone","Being protected so much you rarely got to test your own strength"],
+     newB:"I've coped with hard things before, and I can find help if I need it.",
+     efforts:["List 3 hard things you've already got through","Write down who you'd call if it happened","Take one tiny step toward the thing you fear"],
+     uses:["Health worries","Job uncertainty","Driving or travelling alone","Big changes like moving home","Difficult conversations"]},
+    {stuck:"If I try, I'll fail.", belief:"Failing would mean I am a failure.",
+     roots:["Mistakes being punished or laughed at","Very high expectations at school or home"],
+     newB:"Trying is how I learn. A failed attempt is information, not who I am.",
+     efforts:["Try something new for just 10 minutes","Tell someone about a mistake and what you learned","Praise your effort today, not the result"],
+     uses:["Applying for a job","Learning a new skill","Starting a creative project","Making a new friend","Speaking a new language"]}],
+  angry:[
+    {stuck:"They should have known better.", belief:"People must treat me fairly, or I've been disrespected.",
+     roots:["Being treated unfairly when you couldn't speak up","Seeing anger as the only way to be heard at home"],
+     newB:"I can't control others, but I can say clearly what I need.",
+     efforts:["Use one \"I feel… when… I need…\" sentence","Wait 20 minutes before you reply","Write the angry message, then don't send it"],
+     uses:["A colleague takes credit for your work","Traffic or long queues","A partner forgets something important","A family argument","Poor customer service"]},
+    {stuck:"No one listens to me.", belief:"My needs only matter if I fight for them.",
+     roots:["Being ignored or talked over as a child","Having to compete for attention"],
+     newB:"My needs matter, and I can say them calmly and still be heard.",
+     efforts:["State your need in one calm sentence","Pick a good time to talk, not the middle of an argument","Notice one time this week you were heard"],
+     uses:["Sharing chores at home","Team meetings","Planning a trip together","Talking with parents","Setting limits with friends"]}],
+  annoyed:[
+    {stuck:"Things should go my way.", belief:"Small hassles mean the whole day is ruined.",
+     roots:["Being very tired or stretched for a long time","Needing control because life once felt chaotic"],
+     newB:"Small things can go wrong and the day can still be okay.",
+     efforts:["Name one thing that went right today","Let one small thing go without comment","Check: am I hungry, tired or rushed?"],
+     uses:["Slow internet","Someone chewing loudly","A late delivery","Noisy neighbours","Mess in a shared space"]},
+    {stuck:"They're doing it on purpose.", belief:"Other people don't care about me.",
+     roots:["Times people really were careless with you","Feeling unseen at home or at work"],
+     newB:"Most people are distracted, not against me.",
+     efforts:["Think of one other reason they might act this way","Ask a question instead of assuming","Give one person the benefit of the doubt"],
+     uses:["A message left unanswered","Someone cuts in line","A housemate leaves dishes","A colleague replies late","Family members interrupting"]}],
+  betrayed:[
+    {stuck:"I can never trust anyone again.", belief:"If I let people close, I'll get hurt.",
+     roots:["An earlier betrayal by someone close","Promises broken when you were young"],
+     newB:"I can trust slowly and wisely. One person's choice doesn't define everyone.",
+     efforts:["Notice one person who has been reliable","Share something small and see how it's held","Let trust grow in steps"],
+     uses:["New friendships","Dating again","Joining a new team","Reconnecting with family","Opening up to a friend"]},
+    {stuck:"I should have seen it coming.", belief:"It's my fault I got hurt.",
+     roots:["Being blamed for things others did","Learning to look for your own mistakes first"],
+     newB:"Their choice was theirs. Trusting someone is not a mistake.",
+     efforts:["Write two lists: what was in my control, what wasn't","Speak to yourself as you would to a hurt friend","Take one evening off from replaying it"],
+     uses:["After a breakup","After a friend breaks a confidence","After being let down at work","After a family secret comes out","After a scam or money loss"]}],
+  disappointed:[
+    {stuck:"This always happens to me.", belief:"Good things don't last for me.",
+     roots:["A run of losses or let-downs","Being told not to get your hopes up"],
+     newB:"Some things don't work out and some do. This is one moment, not my whole story.",
+     efforts:["Write one thing that did work out recently","Plan one small thing to look forward to","Swap \"always\" for \"this time\""],
+     uses:["A cancelled plan","Not getting a job","Exam results","An event that falls flat","A friend who can't make it"]},
+    {stuck:"I wasn't good enough for it.", belief:"Rejection proves I'm not worth much.",
+     roots:["Love or praise that felt tied to results","Being compared with siblings or classmates"],
+     newB:"One outcome doesn't measure my worth. I can learn and try again.",
+     efforts:["List what you did well, even though it didn't work out","Ask for feedback on one thing","Try again in a smaller way"],
+     uses:["Job rejections","Admission results","Creative work that isn't picked","A proposal or idea turned down","Competitions"]}],
+  jealous:[
+    {stuck:"They have it all and I don't.", belief:"There isn't enough to go round. Their win is my loss.",
+     roots:["Growing up short of money, attention or praise","Being compared often"],
+     newB:"Other people's success shows what's possible. My path has its own pace.",
+     efforts:["Congratulate someone and mean it","Write one step toward what you want","Mute accounts that make you feel less for a week"],
+     uses:["Scrolling social media","A friend's promotion","A sibling's wedding or milestone","Friends buying homes or cars","Classmates' marks"]},
+    {stuck:"They'll leave me for someone better.", belief:"I'm easy to replace.",
+     roots:["Being left or replaced before","Feeling second best to a sibling"],
+     newB:"I bring something real. Secure connection doesn't need constant checking.",
+     efforts:["Tell someone one thing you value about your bond","Notice one sign that you are chosen","Skip one urge to check their phone or messages"],
+     uses:["A partner's friendly co-worker","A best friend's new friend","Parents praising a sibling","A new team member getting attention","Group chats you're not in"]}],
+  small:[
+    {stuck:"I don't matter here.", belief:"I'm less important than other people.",
+     roots:["Being told to stay quiet or not take up space","Strict hierarchies at home or school"],
+     newB:"My voice counts as much as anyone's.",
+     efforts:["Share one opinion in a group","Sit or stand tall in your next meeting","Ask for what you need once today"],
+     uses:["Meetings with seniors","Family decisions","Doctor's appointments","Group plans with friends","Dealing with officials or landlords"]},
+    {stuck:"Everyone else knows what they're doing.", belief:"I'm not capable.",
+     roots:["Being corrected often","Feeling behind at school"],
+     newB:"I'm learning, like everyone else. Not knowing yet is normal.",
+     efforts:["Ask one question you'd usually keep to yourself","Note one thing you learned today","Remember one thing people ask your help with"],
+     uses:["A new job","New technology","Networking events","Parenting challenges","Money and paperwork"]}],
+  unfocused:[
+    {stuck:"I'm wasting my time.", belief:"I'm lazy or broken.",
+     roots:["Being called lazy or careless","Long-running stress, or a brain that works differently"],
+     newB:"My focus comes and goes. I can work with my brain, not against it.",
+     efforts:["Work in 10-minute blocks","Put your phone in another room for one task","Write the next tiny step on a sticky note"],
+     uses:["Studying","Writing a report","Paying bills","Cleaning","Reading a book"]},
+    {stuck:"I have to do everything at once.", belief:"If I'm not doing everything, I'm falling behind.",
+     roots:["Busy surroundings where you always had to juggle","Messages that you must always be productive"],
+     newB:"Doing one thing well is enough for now.",
+     efforts:["Close every tab but one","Finish one task before starting another","Keep a \"later\" list for distractions"],
+     uses:["Busy work days","Juggling family and chores","Side projects","Planning an event","Festival preparations"]}],
+  notenough:[
+    {stuck:"I should be further along by now.", belief:"I'm only worthy if I achieve.",
+     roots:["Praise mostly for marks or results","Comparing your timeline with others'"],
+     newB:"I'm worthy as I am. Growth is not a race.",
+     efforts:["Do one thing just for joy","Write one quality you like in yourself that isn't an achievement","Rest without earning it first"],
+     uses:["Birthdays","Career comparisons","Friends' life milestones","Performance reviews","New Year goals"]},
+    {stuck:"If they really knew me, they'd leave.", belief:"Something is wrong with me.",
+     roots:["Harsh criticism growing up","Shame about something you couldn't control"],
+     newB:"I'm imperfect and still lovable. Everyone has flaws.",
+     efforts:["Share one small, real thing with someone safe","Write down three kind things people have said to you","Catch one harsh thought about yourself and soften it"],
+     uses:["Close friendships","Relationships","After a mistake at work","Family gatherings","When someone compliments you"]}],
+  tired:[
+    {stuck:"I can't rest until everything is done.", belief:"Resting is lazy.",
+     roots:["A family culture where rest was frowned on","Feeling guilty whenever you relax"],
+     newB:"Rest is part of doing well, not the opposite.",
+     efforts:["Take a 10-minute break without your phone","Go to bed 20 minutes earlier","Say \"I'm resting\" without explaining"],
+     uses:["Weekends","After work","Holidays","Sick days","Festivals and family events"]},
+    {stuck:"I'm always tired and nothing will change.", belief:"This is just how my life is.",
+     roots:["Long stretches of stress or caring for others","Low energy that was never checked"],
+     newB:"Small changes add up. I can look after my energy bit by bit.",
+     efforts:["Drink a glass of water when you wake up","Take a 5-minute walk in daylight","See a doctor if tiredness lasts for weeks"],
+     uses:["Mornings","The afternoon slump","Busy weeks","Exam season","Caring for others"]}],
+  sad:[
+    {stuck:"Nothing will get better.", belief:"Things are hopeless.",
+     roots:["A loss or grief","Long stretches without support"],
+     newB:"Feelings change. This heavy time will shift, even if slowly.",
+     efforts:["Notice one small good moment today","Spend 10 minutes outdoors","Tell one person how you feel"],
+     uses:["After a loss","Quiet evenings alone","Grey or rainy days","Anniversaries","After a setback"]},
+    {stuck:"I shouldn't feel this way.", belief:"Feeling sad means I'm weak.",
+     roots:["Being told to stop crying or be strong","Feelings being hidden at home"],
+     newB:"Sadness is human. Letting it be here helps it pass.",
+     efforts:["Let yourself cry if you need to","Name the feeling out loud","Write it down without trying to fix it"],
+     uses:["After hard news","Missing someone","Festivals when someone is missing","After an argument","Watching something sad"]}],
+  lonely:[
+    {stuck:"No one wants to be around me.", belief:"I'm unlikeable.",
+     roots:["Being left out at school","Moving often and losing friends"],
+     newB:"Connection takes time. People can like me once they know me.",
+     efforts:["Send one short message","Say yes to one small invitation","Go to a class or group once"],
+     uses:["A new city","Weekends alone","After a breakup","Festivals far from home","Working from home"]},
+    {stuck:"I'll be a burden if I reach out.", belief:"My needs are too much for others.",
+     roots:["Looking after others from a young age","Being told not to bother people"],
+     newB:"Reaching out gives others a chance to care. Most friends like being asked.",
+     efforts:["Ask one friend for a call","Accept one offer of help","Tell someone you miss them"],
+     uses:["Hard days","Health worries","Big decisions","Sharing good news","Late evenings"]}]
+};
+
 const order = Object.keys(F);
 let current = "overwhelmed", timer = null, running = false;
 const $ = id => document.getElementById(id);
@@ -362,10 +598,12 @@ function select(k){
   document.querySelectorAll("[data-feel]").forEach(b=>b.setAttribute("aria-pressed","false"));
   document.querySelector('[data-feel="worse"]').textContent = f.good ? "It faded" : "Still heavy";
   document.querySelector('[data-feel="better"]').textContent = f.good ? "Fully here" : "A bit lighter";
+  $("tab-untangle").hidden = !!f.good; $("deeper").hidden = !!f.good;
+  if(!f.good) renderUntangle();
   tab("breathe");
 }
 function tab(s){
-  ["breathe","move","reset"].forEach(n=>{ $("tab-"+n).setAttribute("aria-selected", n===s); $("step-"+n).hidden = n!==s; });
+  ["breathe","move","reset","untangle"].forEach(n=>{ $("tab-"+n).setAttribute("aria-selected", n===s); $("step-"+n).hidden = n!==s; });
   if(s!=="breathe") stop();
 }
 function setOrb(scale, secs){ const o=$("orb"); o.style.transitionDuration = reduce?"0s":secs+"s"; o.style.transform=`scale(${scale*.9})`; }
@@ -411,6 +649,47 @@ document.addEventListener("click",e=>{
 });
 $("start").onclick=start; $("stop").onclick=stop;
 $("jot").addEventListener("input",()=>{try{localStorage.setItem("sp-jot-"+current,$("jot").value)}catch(e){}});
+/* Untangle logic */
+const GENERIC = {efforts:["Say your new belief out loud once a day","Notice one moment today that supports it","Do one small thing the new belief would do"],
+  uses:["At work or school","With family","With friends","When you're alone with your thoughts","When you feel this feeling again"]};
+function uLoad(k){try{return JSON.parse(localStorage.getItem("sp-u-"+k))||{}}catch(e){return {}}}
+function uSave(k,s){try{localStorage.setItem("sp-u-"+k,JSON.stringify(s))}catch(e){}}
+let U = {};
+function renderUntangle(){
+  const k=current, list=P[k]||[]; U=uLoad(k);
+  $("uPicks").innerHTML = list.map((p,i)=>`<button class="pick" data-pick="${i}" aria-pressed="${U.pick===i}">${p.stuck}</button>`).join("")
+    + `<button class="pick own" data-pick="-1" aria-pressed="${U.pick===-1}">Something else, I'll write it</button>`;
+  const has = U.pick!==undefined && U.pick!==null;
+  document.querySelectorAll("#step-untangle .later").forEach(el=>el.hidden=!has);
+  $("uStuck").hidden = U.pick!==-1;
+  $("uStuck").value=U.stuck||""; $("uBelief").value=U.belief||""; $("uOrigin").value=U.origin||"";
+  $("uNew").value=U.newB||""; $("uEvidence").value=U.evidence||"";
+  const pat = has && U.pick>=0 ? list[U.pick] : null;
+  $("uRoots").innerHTML = pat ? pat.roots.map(r=>`<button class="root" data-root="${r.replace(/"/g,"&quot;")}">${r}</button>`).join("") : "";
+  const efforts = pat ? pat.efforts : GENERIC.efforts, uses = pat ? pat.uses : GENERIC.uses;
+  const done = U.done||[];
+  $("uEfforts").innerHTML = efforts.map((e,i)=>`<li><label><input type="checkbox" data-done="${i}" ${done[i]?"checked":""}><span>${e}</span></label></li>`).join("");
+  $("uUses").innerHTML = uses.map(u=>`<li>${u}</li>`).join("");
+  $("uNew").placeholder = pat ? "" : "Write a kinder belief that you can still believe.";
+}
+function uPick(i){
+  const list=P[current]||[]; U = uLoad(current);
+  U.pick=i; U.done=[];
+  if(i>=0){ U.stuck=list[i].stuck; U.belief=list[i].belief; U.newB=list[i].newB; }
+  else { U.stuck=""; U.belief=""; U.newB=""; }
+  uSave(current,U); renderUntangle();
+}
+document.addEventListener("click",e=>{
+  const p=e.target.closest("[data-pick]"); if(p) uPick(+p.dataset.pick);
+  const r=e.target.closest("[data-root]");
+  if(r){ const t=$("uOrigin"); t.value = (t.value? t.value.trim()+"\n":"") + r.dataset.root; U.origin=t.value; uSave(current,U); }
+});
+[["uStuck","stuck"],["uBelief","belief"],["uOrigin","origin"],["uNew","newB"],["uEvidence","evidence"]].forEach(([id,key])=>{
+  $(id).addEventListener("input",()=>{U[key]=$(id).value; uSave(current,U);});
+});
+$("uEfforts").addEventListener("change",e=>{ const i=+e.target.dataset.done; U.done=U.done||[]; U.done[i]=e.target.checked; uSave(current,U); });
+$("uClear").addEventListener("click",()=>{ try{localStorage.removeItem("sp-u-"+current)}catch(e){} renderUntangle(); });
+
 select(current); setOrb(.5,0);
 </script>
 <script>
