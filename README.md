@@ -4,4 +4,4 @@ A small calming tool. Pick what you're feeling (overwhelmed, anxious, afraid, an
 
 Plain HTML, no build step. Installable on phones and works offline after the first visit.
 
-Hosted on Cloudflare Pages: build command empty, output directory `/`.
+Hosted on Cloudflare Workers as static assets. The site lives in `public/`; `wrangler.jsonc` tells Cloudflare to serve that folder. Deploy command: `npx wrangler deploy`.
