@@ -416,6 +416,13 @@ const F = {
     m:{name:"Stretch into it", why:"Letting your body join in helps a good feeling settle deeper.",
       steps:[["Stretch your arms up and out as wide as they go","10 sec"],["Turn your face toward light or fresh air, eyes closed","20 sec"],["Look around slowly and notice one colour, one sound and one texture",""],["Let yourself smile, even a little, and hold it","3 breaths"]]},
     r:{prompt:"Write three small details of this moment you want to remember: what you see, who or what is here, how it feels.", line:"You don't need a reason to enjoy something. Noticing it is how good moments stick."}},
+  focused:{label:"Staying focused", good:true, title:"You're in the zone. <em>Keep the flow going.</em>",
+    note:"Focus lasts longer with short, steady breaks. A calm breath and a quick reset help you go back in fresh, without losing momentum.",
+    b:{name:"Steady focus breath", how:"Breathe in for 4, hold for 4, breathe out for 4. Keep your eyes soft on one point in front of you.",
+      phases:[["Breathe in",4,1],["Hold",4,1],["Breathe out",4,.45]], cycles:4},
+    m:{name:"Focus break", why:"A 1-minute break every 25 to 45 minutes keeps your mind sharp and your body comfortable.",
+      steps:[["Look at something far away to rest your eyes","20 sec"],["Roll your shoulders back and stretch your neck gently","5 times"],["Stand up, reach overhead and take a sip of water",""],["Sit back down, feet flat, and take one slow breath before you start again",""]]},
+    r:{prompt:"What is the one thing I'm working on right now, and what does \"done\" look like for this session?", line:"Protect your focus: phone face down, one tab open, and a short break before you feel drained."}},
 };
 
 /* colour per feeling: [colour, text on colour, soft tint] */
@@ -425,7 +432,7 @@ const C = {
   violet:["#7A5AE0","#FFFFFF","rgba(122,90,224,.2)"], sky:["#8CCBF5","#3A3860","rgba(140,203,245,.3)"]
 };
 const tone = {overwhelmed:"orange",anxious:"sky",fear:"violet",angry:"orange",annoyed:"sun",impatient:"orange",betrayed:"pink",disappointed:"sky",
-  jealous:"leaf",small:"sun",unfocused:"violet",notenough:"pink",tired:"sky",bored:"sun",sad:"violet",lonely:"pink",present:"leaf"};
+  jealous:"leaf",small:"sun",unfocused:"violet",notenough:"pink",tired:"sky",bored:"sun",sad:"violet",lonely:"pink",present:"leaf",focused:"violet"};
 
 /* Untangle: stuck points per hard feeling */
 const P = {
